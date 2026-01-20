@@ -13,11 +13,9 @@
             --gold: #ffd700;
             --text: #ffffff;
             --panel-bg: rgba(30, 20, 60, 0.85);
-            /* Adding a wood texture URL. In a real app, download this and link locally. */
             --wood-texture: url('https://images.pexels.com/photos/129731/pexels-photo-129731.jpeg?cs=srgb&dl=pexels-fwstudio-33348-129731.jpg&fm=jpg');
         }
 
-        /* --- GLOBAL RESET --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         
         body {
@@ -31,7 +29,6 @@
             flex-direction: column;
         }
 
-        /* --- HEADER --- */
         header {
             padding: 15px;
             text-align: center;
@@ -40,27 +37,25 @@
         }
         h1 { margin: 0; font-size: 1.5rem; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* --- MAIN LAYOUT --- */
         main {
             flex: 1;
-            display: none; /* Hidden by default */
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            padding-bottom: 80px; /* Space for nav */
+            padding-bottom: 100px;
             overflow-y: auto;
         }
         main.active-view { display: flex; animation: fadeUp 0.4s ease-out; }
 
-        /* --- COMPONENTS --- */
         .glass-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255,0,204,0.3);
             border-radius: 20px;
             padding: 20px;
             width: 100%;
-            max-width: 340px;
+            max-width: 360px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -73,104 +68,83 @@
             font-size: 1.1rem;
             font-weight: bold;
             border-radius: 50px;
-            margin-top: 20px;
+            margin: 20px 10px 10px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255,0,204,0.4);
-            transition: transform 0.1s;
+            transition: transform 0.2s, opacity 0.2s;
         }
         button.btn-main:active { transform: scale(0.95); opacity: 0.9; }
 
-        /* --- NEW REALISTIC WOODEN DICE STYLES --- */
-        .dice-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .level-btns { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .level-btn { padding: 10px 20px; border-radius: 30px; border: 2px solid var(--primary); background: transparent; color: white; font-weight: bold; cursor: pointer; }
+        .level-btn.active { background: var(--primary); }
+
+        /* Dice */
+        .dice-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         .dice-col { display: flex; flex-direction: column; align-items: center; }
-        
-        .scene { width: 85px; height: 85px; perspective: 800px; }
+        .scene { width: 90px; height: 90px; perspective: 800px; }
         .cube {
             width: 100%; height: 100%; position: relative;
             transform-style: preserve-3d;
             transform: rotateX(-20deg) rotateY(-45deg);
-            transition: transform 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
+            transition: transform 2s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
         .cube__face {
-            position: absolute; width: 85px; height: 85px;
-            /* Realistic Wood Texture & Color */
+            position: absolute; width: 90px; height: 90px;
             background-image: var(--wood-texture);
             background-size: cover;
-            background-color: #d4b483; /* Fallback color */
-            border: none; /* No digital borders */
-            border-radius: 6px; /* Slightly rounded edges for realism */
-            /* Lighting: Inset shadow for depth + outer shadow */
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.3);
-            
+            background-color: #d4b483;
+            border-radius: 8px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.4);
             display: flex; justify-content: center; align-items: center;
-            
-            /* Hand-drawn looking text style */
-            font-family: 'Comic Sans MS', 'Marker Felt', sans-serif;
-            font-size: 1rem; 
-            font-weight: bold; 
-            text-transform: uppercase;
-            color: #222; /* Softer black like ink */
-            
-            text-align: center;
+            font-family: 'Comic Sans MS', cursive; font-size: 1.1rem; font-weight: bold;
+            color: #111; text-align: center; padding: 8px;
             backface-visibility: hidden;
-            padding: 5px;
         }
-        /* Face Transforms (adjusted translation for new borders) */
-        .face-0 { transform: rotateY(0deg) translateZ(42.5px); }
-        .face-1 { transform: rotateY(180deg) translateZ(42.5px); }
-        .face-2 { transform: rotateY(90deg) translateZ(42.5px); }
-        .face-3 { transform: rotateY(-90deg) translateZ(42.5px); }
-        .face-4 { transform: rotateX(90deg) translateZ(42.5px); }
-        .face-5 { transform: rotateX(-90deg) translateZ(42.5px); }
-        
-        .dice-label { font-size: 0.7rem; color: #aaa; margin-top: 8px; }
+        .face-0 { transform: rotateY(0deg) translateZ(45px); }
+        .face-1 { transform: rotateY(180deg) translateZ(45px); }
+        .face-2 { transform: rotateY(90deg) translateZ(45px); }
+        .face-3 { transform: rotateY(-90deg) translateZ(45px); }
+        .face-4 { transform: rotateX(90deg) translateZ(45px); }
+        .face-5 { transform: rotateX(-90deg) translateZ(45px); }
 
-        /* --- T&D --- */
-        .td-box { min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 20px; color: #fff; }
-        .choice-btns { display: flex; gap: 10px; width: 100%; }
-        .btn-choice { flex: 1; padding: 15px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 1rem; }
-        
-        /* --- WHEEL --- */
-        .wheel-wrap { width: 250px; height: 250px; position: relative; margin: 0 auto; }
-        .wheel {
-            width: 100%; height: 100%; border-radius: 50%; border: 4px solid white;
-            background: conic-gradient(red, orange, yellow, lime, cyan, blue, magenta, purple);
-            transition: transform 3s ease-out;
-        }
-        .marker {
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid white; z-index: 10;
-        }
+        .dice-label { font-size: 0.8rem; color: #ccc; margin-top: 10px; }
 
-        /* --- CARDS --- */
-        .card-scene { width: 220px; height: 320px; perspective: 1000px; margin: 0 auto; }
-        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; }
+        /* T&D */
+        .td-box { min-height: 140px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 15px; color: #fff; transition: opacity 0.4s; }
+
+        /* Wheel */
+        .wheel-wrap { width: 260px; height: 260px; position: relative; margin: 20px auto; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 5px solid var(--gold); background: conic-gradient(#ff00cc, #ff4b1f, #ffd700, #00d2ff, #333399, #ff00cc); transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        .marker { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 35px solid var(--primary); z-index: 10; }
+
+        /* Cards */
+        .card-scene { width: 240px; height: 340px; perspective: 1000px; margin: 20px auto; cursor: pointer; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.8s; }
         .card.is-flipped { transform: rotateY(180deg); }
         .card-face {
             position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            display: flex; justify-content: center; align-items: center;
-            border-radius: 15px; padding: 20px; text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center; border-radius: 18px; padding: 25px; text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
-        .card-front { background: #222; border: 2px solid var(--gold); color: var(--gold); font-size: 2rem; }
-        .card-back { background: #fff; transform: rotateY(180deg); color: #000; font-weight: bold; font-size: 1.2rem; }
+        .card-front { background: linear-gradient(135deg, #222, #000); border: 3px solid var(--gold); color: var(--gold); font-size: 3rem; }
+        .card-back { background: linear-gradient(135deg, #fff, #f0f0f0); color: #111; font-size: 1.3rem; font-weight: bold; transform: rotateY(180deg); }
 
-        /* --- NAV --- */
+        /* Nav */
         nav {
             position: fixed; bottom: 0; width: 100%;
-            background: #1a1a1a; border-top: 1px solid #333;
-            display: flex; justify-content: space-around; padding: 10px 0;
+            background: #0f0f0f; border-top: 1px solid #333;
+            display: flex; justify-content: space-around; padding: 12px 0;
             z-index: 100;
         }
         nav button {
             background: none; border: none; color: #888;
-            display: flex; flex-direction: column; align-items: center;
-            font-size: 0.7rem; gap: 5px;
+            display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; gap: 4px;
         }
         nav button.active { color: var(--primary); }
-        nav button span { font-size: 1.5rem; }
+        nav button span { font-size: 1.8rem; }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -182,6 +156,11 @@
 <main id="view-dice" class="active-view">
     <div class="glass-panel">
         <h2 style="margin:0 0 15px 0; color:var(--primary)">Action Dice</h2>
+        <div class="level-btns">
+            <button class="level-btn active" onclick="setLevel('mild', this)">Mild 🌹</button>
+            <button class="level-btn" onclick="setLevel('hot', this)">Hot 🔥</button>
+            <button class="level-btn" onclick="setLevel('wild', this)">Wild 😈</button>
+        </div>
         <div class="dice-row">
             <div class="dice-col">
                 <div class="scene"><div class="cube" id="cube-0"></div></div>
@@ -196,38 +175,44 @@
                 <div class="dice-label">How</div>
             </div>
         </div>
-        <button class="btn-main" onclick="rollDice()">ROLL</button>
+        <button class="btn-main" onclick="rollDice()">ROLL THE DICE</button>
     </div>
 </main>
 
 <main id="view-td">
     <div class="glass-panel">
         <h2 style="margin:0 0 15px 0; color:var(--primary)">Truth or Dare</h2>
-        <div id="td-result" class="td-box">Make your choice...</div>
-        <div class="choice-btns">
-            <button class="btn-choice" style="background:#00d2ff" onclick="doTD('truth')">TRUTH</button>
-            <button class="btn-choice" style="background:#ff4b1f" onclick="doTD('dare')">DARE</button>
+        <div id="td-result" class="td-box">Choose your fate...</div>
+        <div style="display:flex; gap:15px; justify-content:center;">
+            <button class="btn-main" style="background:linear-gradient(45deg,#00d2ff,#0099cc)" onclick="doTD('truth')">TRUTH</button>
+            <button class="btn-main" style="background:linear-gradient(45deg,#ff4b1f,#ff0066)" onclick="doTD('dare')">DARE</button>
         </div>
     </div>
 </main>
 
 <main id="view-wheel">
-    <div class="wheel-wrap">
-        <div class="marker"></div>
-        <div class="wheel" id="wheel"></div>
+    <div class="glass-panel" style="padding:30px 20px;">
+        <h2 style="margin:0 0 20px 0; color:var(--primary)">Romance Wheel</h2>
+        <div class="wheel-wrap">
+            <div class="marker"></div>
+            <div class="wheel" id="wheel"></div>
+        </div>
+        <div id="wheel-text" style="margin-top:25px; font-size:1.4rem; font-weight:bold; color:var(--gold); min-height:60px;">Spin for a surprise...</div>
+        <button class="btn-main" onclick="spinWheel()">SPIN</button>
     </div>
-    <div id="wheel-text" style="margin-top:20px; font-weight:bold; color:var(--gold);">Ready to Spin</div>
-    <button class="btn-main" onclick="spinWheel()">SPIN</button>
 </main>
 
 <main id="view-cards">
-    <div class="card-scene" onclick="flipCard()">
-        <div class="card" id="myCard">
-            <div class="card-face card-front">❤️</div>
-            <div class="card-face card-back" id="cardText">Content</div>
+    <div class="glass-panel" style="padding:30px;">
+        <h2 style="margin:0 0 20px 0; color:var(--primary)">Intimate Cards</h2>
+        <div class="card-scene" onclick="flipCard()">
+            <div class="card" id="myCard">
+                <div class="card-face card-front">❤️</div>
+                <div class="card-face card-back" id="cardText">Tap to reveal your intimate challenge...</div>
+            </div>
         </div>
+        <p style="margin-top:20px; color:#aaa; text-align:center;">Tap card to flip</p>
     </div>
-    <p style="margin-top:20px; color:#aaa;">Tap to reveal</p>
 </main>
 
 <nav>
@@ -238,169 +223,414 @@
 </nav>
 
 <script>
-    // --- GLOBAL ERROR HANDLER ---
-    window.onerror = function(msg, url, line) {
-        // alert("Error: " + msg + "\nLine: " + line); // Disabled for production
-    };
+// --- DATA (Expanded to production level - hundreds of unique items) ---
 
-    // --- DATA ---
-    const d1 = ["Kiss", "Lick", "Bite", "Touch", "Massage", "Tease"];
-    const d2 = ["Neck", "Lips", "Ear", "Thigh", "Chest", "Back"];
-    const d3 = ["Softly", "Hard", "Slowly", "Wetly", "Deeply", "Now"];
-    
-    // --- UPDATED DATA ---
+// Dice levels
+const diceData = {
+    mild: {
+        actions: ["Kiss", "Hug", "Caress", "Nibble", "Massage", "Tickle", "Stroke", "Blow gently", "Lick softly", "Tease"],
+        parts: ["Lips", "Neck", "Cheek", "Ear", "Hand", "Shoulder", "Arm", "Back", "Forehead", "Fingers"],
+        hows: ["Softly", "Slowly", "Tenderly", "Passionately", "Gently", "Playfully", "Sweetly", "Lovingly", "Warmly", "Carefully"]
+    },
+    hot: {
+        actions: ["Lick", "Suck", "Bite gently", "Grind", "Spank lightly", "Tease with tongue", "Finger", "Rub", "Kiss deeply", "Whisper dirty"],
+        parts: ["Thighs", "Chest", "Belly", "Butt", "Inner thighs", "Breasts", "Lower back", "Hips", "Nipples", "Waist"],
+        hows: ["Firmly", "Wetly", "Deeply", "Slowly & teasingly", "Passionately", "With ice", "Blindfolded", "For 30 seconds", "Hungrily", "Seductively"]
+    },
+    wild: {
+        actions: ["Spank", "Bite harder", "Pull hair", "Pin down", "Use toy (if available)", "Edge", "Roleplay command", "Choke lightly", "Dirty talk loud", "Striptease"],
+        parts: ["Ass", "Genitals", "Inner thighs (very close)", "Neck (hickey)", "Feet", "Behind knees", "Earlobes", "Collarbone", "Lower stomach", "Everywhere"],
+        hows: ["Hard", "For 1 minute", "While moaning", "Naked", "In shower", "Roughly", "Dominantly", "Submissively", "With toy", "Until begging"]
+    }
+};
 
-    const truths = [
-        "What is a fantasy you've been too shy to tell me?",
-        "If you could dress me in any outfit, what would it be?",
-        "What is the exact moment you fell for me?",
-        "What is your favorite noise I make?",
-        "Have you ever had a naughty dream about me? Describe it.",
-        "What is one thing you want to try in the bedroom?",
-        "Do you prefer lights on, off, or dim?",
-        "What is the most sensitive part of your body right now?",
-        "What is a movie scene you've always wanted to recreate?",
-        "What’s the most adventurous place you’d like to get intimate?",
-        "If I gave you a 'free pass' to do anything to me for 1 hour, what would you do?",
-        "What is your biggest turn-on that isn't physical?",
-        "Describe your perfect date night.",
-        "What’s the most embarrassing thing you’ve done for a crush?"
-    ];
+let currentLevel = 'hot'; // default
 
-    const dares = [
-        "Let me blindfold you and feed you a mystery item.",
-        "Do your best sexy dance for 30 seconds.",
-        "Whisper exactly what you want to do to me in my ear.",
-        "Let me write a word on your back with my tongue (you have to guess it).",
-        "Pose for a photo (for my eyes only).",
-        "Give me a massage anywhere I choose for 2 minutes.",
-        "Let me scroll through your photo gallery for 1 minute.",
-        "Use an ice cube on my neck.",
-        "Bite your lip and look at me with 'hungry' eyes.",
-        "Let me tickle you for 20 seconds without you laughing.",
-        "Remove one piece of clothing using only your teeth (if possible).",
-        "Walk across the room in the most seductive way possible.",
-        "Serenade me with a romantic song (bad singing encouraged)."
-    ];
+// Truths (~100+ mix romantic/spicy)
+const truths = [
+    "What's your wildest sexual fantasy about us?",
+    "Have you ever faked an orgasm with me?",
+    "What's the naughtiest dream you've had about me?",
+    "Favorite body part of mine to touch/kiss?",
+    "What's your biggest turn-on that I do?",
+    "Ever had a one-night stand before me?",
+    "What's the most embarrassing thing that's happened during sex?",
+    "Lights on or off during intimacy?",
+    "Favorite position and why?",
+    "Have you ever thought about someone else while with me?",
+    "What's the sexiest outfit you'd love me to wear?",
+    "How old were you when you lost your virginity?",
+    "Ever sent nudes to someone before?",
+    "What's your favorite way I touch you?",
+    "Have you ever masturbated thinking of me today?",
+    "What's the riskiest place you'd want to have sex?",
+    "Do you like being dominant or submissive?",
+    "What's one thing you've always wanted to try in bed?",
+    "Have you ever watched porn with a partner?",
+    "What's your guilty pleasure fantasy?",
+    // Add more from sources - continuing pattern...
+    "Describe your perfect foreplay session.",
+    "Ever lied about how many people you've slept with?",
+    "What's the longest you've gone without sex?",
+    "Favorite type of kiss?",
+    "Have you ever had sex in a public place?",
+    "What's the hottest memory of us together?",
+    "Do you prefer quickies or long sessions?",
+    "Ever roleplayed before? With who?",
+    "What's your favorite thing I say in bed?",
+    "Have you ever cried during sex?",
+    "What's the weirdest place you've masturbated?",
+    "Do you like dirty talk? How much?",
+    "Ever had a threesome fantasy about us?",
+    "What's your sex playlist song?",
+    "Have you ever been caught masturbating?",
+    "Favorite erogenous zone besides genitals?",
+    "What's the most times you've orgasmed in one session?",
+    "Ever used food in sex?",
+    "Do you like spanking? Giving or receiving?",
+    "What's your biggest insecurity in bed?",
+    "Ever had phone sex?",
+    "Favorite way to be seduced?",
+    "Have you ever sexted at work?",
+    "What's the sexiest thing I've worn?",
+    "Do you like being tied up?",
+    "Ever had sex in a car?",
+    "What's your favorite oral technique?",
+    "Have you ever had a same-sex experience?",
+    "What's the hottest thing someone said to you during sex?",
+    "Do you watch porn? What kind?",
+    "Ever had sex with someone much older/younger?",
+    "Favorite position for oral?",
+    "Have you ever had a friends-with-benefits?",
+    "What's your go-to move to turn me on?",
+    "Ever faked a headache to avoid sex?",
+    "Do you like anal play? Giving or receiving?",
+    "What's the longest sex session you've had?",
+    "Ever had sex on the first date?",
+    "Favorite lingerie color on me?",
+    "Have you ever been to a strip club?",
+    "What's your biggest turn-off?",
+    "Do you like being called names in bed?",
+    "Ever had a one-night stand regret?",
+    "Favorite way to be woken up sexually?",
+    "Have you ever recorded yourself?",
+    "What's the most public place you've had sex?",
+    "Do you like shower sex?",
+    "Ever had a quickie in an unusual place?",
+    "Favorite sex toy (if any)?",
+    "Have you ever had sex while drunk?",
+    "What's your favorite part of foreplay?",
+    "Ever had sex outdoors?",
+    "Do you like eye contact during sex?",
+    "Have you ever had a booty call?",
+    "What's the sexiest text I've sent you?",
+    "Do you like being watched?",
+    "Ever had sex in someone else's bed?",
+    "Favorite time of day for sex?",
+    "Have you ever used handcuffs?",
+    "What's your biggest fantasy location?",
+    "Do you like nipple play?",
+    "Ever had morning sex regret?",
+    "Favorite way I moan?",
+    "Have you ever had sex on vacation?",
+    "Do you like being teased?",
+    "Ever had a sex dream about a celebrity?",
+    "What's the hottest thing about my body?",
+    "Do you like rough sex?",
+    "Have you ever paid for sex?",
+    "Favorite after-sex activity?",
+    "Ever had sex in a bathroom?",
+    "Do you like being bitten?",
+    "What's your sex number?",
+    "Have you ever had sex with an ex?",
+    "Favorite way to give oral?",
+    "Do you like being edged?",
+    "Ever had a threesome?",
+    "What's the sexiest voice I use?",
+    "Have you ever had sex at work?"
+    // You can keep adding; this is already ~100
+];
 
-    // These will appear randomly when spinning the wheel
-    const wheelRes = [
-        "French Kiss", 
-        "Sensual Massage", 
-        "Remove Item", 
-        "Ear Nibble", 
-        "Slow Dance", 
-        "Neck Kiss", 
-        "Body Shot", 
-        "Spank", 
-        "Deep Gaze", 
-        "Whisper Secret",
-        "Foot Rub",
-        "Blindfold"
-    ];
+// Dares (~100+ spicy/fun)
+const dares = [
+    "Give me a slow, sensual lap dance for 60 seconds.",
+    "Blindfold me and tease me with ice for 1 minute.",
+    "Whisper the dirtiest thing you want to do to me right now.",
+    "Remove one piece of my clothing with your teeth.",
+    "Kiss my neck until it leaves a mark (hickey).",
+    "Perform a sexy striptease down to underwear.",
+    "Massage my inner thighs for 2 minutes without going higher.",
+    "Send me a dirty text you'd never send anyone else.",
+    "Let me spank you 5 times (your choice of intensity).",
+    "Lick chocolate/whipped cream off my finger seductively.",
+    "Do a naked twerk for 30 seconds.",
+    "Give me oral for exactly 1 minute then stop.",
+    "Pose nude for a private photo (just us).",
+    "Let me tie your hands and tease you for 2 minutes.",
+    "Grind on me fully clothed until I say stop.",
+    "Moan my name seductively 10 times.",
+    "Kiss me passionately for 60 seconds without touching anywhere else.",
+    "Use your tongue to draw a heart on my stomach.",
+    "Give me a foot massage while describing a fantasy.",
+    "Let me blindfold you and feed you something sexy.",
+    "Do your best dirty talk monologue for 45 seconds.",
+    "Remove my shirt and kiss my chest for 30 seconds.",
+    "Let me write 'yours' on your body with lipstick.",
+    "Give me a hickey on my inner thigh.",
+    "Dance seductively to a song I choose.",
+    "Let me tickle you naked for 20 seconds.",
+    "Kiss every inch of my back slowly.",
+    "Whisper your biggest fantasy in my ear.",
+    "Let me choose where you kiss me next.",
+    "Perform oral teasing (no finish) for 90 seconds.",
+    "Let me spank you while you count out loud.",
+    "Strip one layer and stay that way until next dare.",
+    "Give me a sensual shoulder massage naked.",
+    "Let me edge you for 2 minutes.",
+    "Do a sexy crawl across the floor to me.",
+    "Kiss my lips then move lower every 10 seconds.",
+    "Let me blindfold and guide your hands on me.",
+    "Tell me a dirty secret while grinding on my lap.",
+    "Give me a lap dance blindfolded.",
+    "Let me choose a toy (or hand) for 1 minute tease.",
+    "Moan the alphabet seductively.",
+    "Let me take a sexy photo of you (private).",
+    "Kiss me while describing how wet/hard I make you.",
+    "Give me oral with ice in your mouth.",
+    "Let me tie you up and tease for 3 minutes.",
+    "Do a full nude pose for 30 seconds.",
+    "Whisper what you'd do if we were in public.",
+    "Give me a hickey where no one will see.",
+    "Let me spank you 10 times (count them).",
+    "Dance naked to your favorite sexy song.",
+    "Let me kiss/lick your most sensitive spot for 60s.",
+    "Give me a slow handjob/blowjob tease.",
+    "Let me blindfold you and kiss everywhere.",
+    "Tell me your dirtiest thought right now.",
+    "Do a sexy roleplay scene for 1 minute.",
+    "Let me choose your next orgasm method.",
+    "Give me a full-body massage naked.",
+    "Kiss my entire body slowly (5 min limit).",
+    "Let me edge you until you beg.",
+    "Perform oral until I say stop.",
+    "Let me take control completely for 5 minutes.",
+    "Whisper dirty compliments while touching me.",
+    "Give me a striptease then lap dance.",
+    "Let me spank and kiss after each.",
+    "Do a sexy crawl and kiss my feet.",
+    "Tell me a fantasy while I tease you.",
+    "Give me oral with eye contact.",
+    "Let me blindfold and use feathers/ice.",
+    "Dance seductively then drop to knees.",
+    "Let me choose where to leave hickeys.",
+    "Give me a handjob with dirty talk.",
+    "Perform a fantasy roleplay.",
+    "Let me tie you and edge for fun.",
+    "Kiss me deeply while grinding.",
+    "Give me a sensual shower (if possible).",
+    "Let me take sexy videos (private).",
+    "Whisper your wildest dream about us.",
+    "Do a naked photoshoot pose.",
+    "Give oral teasing with pauses.",
+    "Let me spank while you moan.",
+    "Dance and remove clothes slowly.",
+    "Let me blindfold and guide you.",
+    "Tell me how I taste while kissing.",
+    "Give me a full tease session.",
+    "Let me choose your next move.",
+    "Perform oral for 2 full minutes.",
+    "Let me edge you to the brink.",
+    "Whisper dirty secrets while touching.",
+    "Give a lap dance with no hands.",
+    "Let me take control for longer.",
+    "Do a sexy crawl across bed.",
+    "Kiss every erogenous zone.",
+    "Let me blindfold and surprise you.",
+    "Give me oral with ice or warm drink.",
+    "Tell me your favorite way I finish.",
+    "Let me spank and soothe.",
+    "Dance naked and seduce me.",
+    "Perform a fantasy you've hidden."
+    // ~100+ dares - plenty for endless play
+];
 
-    const cards = [
-        "Maintain eye contact for 60 seconds without speaking.",
-        "Trace my spine with your fingernails.",
-        "Kiss every finger on my left hand.",
-        "Sit on my lap and just hug me for a minute.",
-        "Tell me 3 things you love about my body.",
-        "Slow dance with me (no music required).",
-        "Recreate our first kiss.",
-        "Give me a 'butterfly kiss' (using your eyelashes) on my cheek.",
-        "Hold my hand and describe our future.",
-        "Kiss my inner wrist.",
-        "Lay your head on my chest and listen to my heartbeat.",
-        "Give me a compliment that has nothing to do with my looks.",
-        "Your choice: Truth or Dare?"
-    ];
+// Wheel results (50+)
+const wheelRes = [
+    "Passionate French Kiss for 60s", "Sensual Full-Body Massage", "Remove One Item Slowly", "Nibble & Suck Earlobes", "Slow Naked Dance Together",
+    "Give Hickey on Neck", "Body Shot with Tequila", "Light Spanking Session", "Deep Eye Contact + Whisper", "Blindfold & Tease",
+    "Sexy Foot Rub", "Ice Cube Trail Down Body", "Lap Dance Challenge", "Dirty Talk for 1 Min", "Strip One Layer Each",
+    "Kiss Every Finger", "Sensual Back Scratch", "Roleplay Teacher/Student", "Blindfold Kiss Game", "Whipped Cream Play",
+    "Slow Grinding Session", "Neck & Collarbone Kisses", "Hand Under Clothes Tease", "Spank & Kiss Combo", "Fantasy Confession",
+    "Shower Together (if possible)", "Edging Challenge", "Naked Pillow Fight", "Sensual Whisper Game", "Blind Taste Test (body)",
+    "Dirty Dice Roll", "Massage with Oil", "Kiss Roulette", "Tease with Feathers", "Sexy Photo Pose",
+    "Lap Dance + Kiss", "Hickey Hunt", "Slow Strip Game", "Blindfold & Guide", "Roleplay Boss/Employee",
+    "Ice & Warm Breath Play", "Sensual Bath (together)", "Dirty Story Telling", "Naked Twister", "Tease Until Beg",
+    "Passionate Makeout Only", "Body Writing with Finger", "Slow Dance Naked", "Fantasy Reenactment", "Edgy Tease Session"
+];
 
-    // --- INIT ---
-    window.onload = function() {
-        initDiceFaces('cube-0', d1);
-        initDiceFaces('cube-1', d2);
-        initDiceFaces('cube-2', d3);
-    };
+// Cards (50+ intimate/romantic prompts)
+const cards = [
+    "Maintain eye contact and say one thing you love about me.",
+    "Trace my body with your fingertips for 60 seconds.",
+    "Kiss every fingertip slowly and lovingly.",
+    "Sit on my lap and hold me tight for 2 minutes.",
+    "Tell me 5 things you find sexy about my body.",
+    "Slow dance with me—no music needed.",
+    "Recreate our first kiss, but make it hotter.",
+    "Give butterfly kisses all over my face.",
+    "Hold me and describe our dream future.",
+    "Kiss my wrists and inner arms softly.",
+    "Lay on me and listen to my heartbeat.",
+    "Give a non-physical compliment that means a lot.",
+    "Your choice: Truth or a Dare?",
+    "Massage my shoulders while whispering sweet things.",
+    "Kiss my forehead, then lips, then lower.",
+    "Tell me your favorite memory of us naked.",
+    "Draw a heart on my back with your tongue.",
+    "Hold hands and stare into my soul for 1 min.",
+    "Give me your best seductive look for 30s.",
+    "Kiss my collarbone slowly.",
+    "Tell me one thing you'd change in bed (nicely).",
+    "Cuddle and rank our best sex moments.",
+    "Kiss my stomach and describe how it feels.",
+    "Give me a compliment about my moans.",
+    "Slow kiss my neck until I shiver.",
+    "Tell me your favorite way I taste.",
+    "Massage my feet while looking into my eyes.",
+    "Whisper what turns you on most about me.",
+    "Give a gentle bite on my lip.",
+    "Describe our perfect night in detail.",
+    "Kiss my thighs without going higher.",
+    "Tell me a fantasy you'd love us to try.",
+    "Hold me from behind and kiss my neck.",
+    "Give me your sexiest smile then kiss.",
+    "Trace my spine and tell me I’m beautiful.",
+    "Kiss every freckle/mole you find.",
+    "Slow dance and whisper dirty promises.",
+    "Tell me the moment you knew you wanted me.",
+    "Give a sensual ear nibble.",
+    "Cuddle and rank my body parts (playfully).",
+    "Kiss my palms and inner wrists.",
+    "Describe how I make you feel desired.",
+    "Give me a long, deep hug naked.",
+    "Tell me one new thing to try tonight.",
+    "Kiss along my jawline slowly.",
+    "Whisper your biggest turn-on about us.",
+    "Massage my scalp while kissing forehead.",
+    "Tell me why we're perfect together.",
+    "Give a slow, teasing kiss everywhere.",
+    "Hold me and promise one sexy thing."
+    // 50+ intimate cards
+];
 
-    function initDiceFaces(id, values) {
+let usedTruths = new Set();
+let usedDares = new Set();
+
+// --- INIT ---
+window.onload = function() {
+    updateDiceFaces();
+};
+
+// Dice logic
+function setLevel(level, btn) {
+    currentLevel = level;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateDiceFaces();
+}
+
+function updateDiceFaces() {
+    const data = diceData[currentLevel];
+    initDiceFaces('cube-0', data.actions);
+    initDiceFaces('cube-1', data.parts);
+    initDiceFaces('cube-2', data.hows);
+}
+
+function initDiceFaces(id, values) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = "";
+    for (let i = 0; i < 6; i++) {
+        let face = document.createElement('div');
+        face.className = `cube__face face-${i}`;
+        face.innerText = values[i % values.length]; // cycle if <6
+        el.appendChild(face);
+    }
+}
+
+function rollDice() {
+    ['cube-0', 'cube-1', 'cube-2'].forEach(id => {
         const el = document.getElementById(id);
-        if(!el) return;
-        el.innerHTML = "";
-        // Create 6 faces
-        for(let i=0; i<6; i++) {
-            let div = document.createElement('div');
-            div.className = `cube__face face-${i}`;
-            div.innerText = values[i];
-            el.appendChild(div);
-        }
+        const r = Math.floor(Math.random() * 6);
+        let rx = 0, ry = 0;
+        if (r === 1) ry = 180;
+        else if (r === 2) ry = -90;
+        else if (r === 3) ry = 90;
+        else if (r === 4) rx = -90;
+        else if (r === 5) rx = 90;
+        const extra = 720 + Math.floor(Math.random() * 4) * 360;
+        el.style.transform = `rotateX(${rx + extra}deg) rotateY(${ry + extra}deg)`;
+    });
+}
+
+// T&D with anti-repeat
+function doTD(type) {
+    const arr = type === 'truth' ? truths : dares;
+    const used = type === 'truth' ? usedTruths : usedDares;
+    let available = arr.filter((_, i) => !used.has(i));
+    if (available.length === 0) {
+        used.clear(); // reset when depleted
+        available = arr;
     }
+    const idx = arr.indexOf(available[Math.floor(Math.random() * available.length)]);
+    used.add(idx);
+    const txt = arr[idx];
+    const el = document.getElementById('td-result');
+    el.style.opacity = 0;
+    setTimeout(() => {
+        el.innerText = txt;
+        el.style.opacity = 1;
+    }, 300);
+}
 
-    // --- LOGIC: DICE ---
-    function rollDice() {
-        ['cube-0', 'cube-1', 'cube-2'].forEach((id, idx) => {
-            const el = document.getElementById(id);
-            const r = Math.floor(Math.random() * 6);
-            
-            let rx = 0, ry = 0;
-            if(r===1) ry=180;
-            else if(r===2) ry=-90;
-            else if(r===3) ry=90;
-            else if(r===4) rx=-90;
-            else if(r===5) rx=90;
+// Wheel
+let wheelDeg = 0;
+function spinWheel() {
+    wheelDeg += 1440 + Math.floor(Math.random() * 1440);
+    document.getElementById('wheel').style.transform = `rotate(${wheelDeg}deg)`;
+    document.getElementById('wheel-text').innerText = "Spinning...";
+    setTimeout(() => {
+        const res = wheelRes[Math.floor(Math.random() * wheelRes.length)];
+        document.getElementById('wheel-text').innerText = res;
+    }, 4000);
+}
 
-            const spins = 720 + (Math.floor(Math.random()*3)*360);
-            el.style.transform = `rotateX(${rx + spins}deg) rotateY(${ry + spins}deg)`;
-        });
-    }
-
-    // --- LOGIC: T&D ---
-    function doTD(type) {
-        const arr = type === 'truth' ? truths : dares;
-        const txt = arr[Math.floor(Math.random() * arr.length)];
-        const el = document.getElementById('td-result');
-        el.style.opacity = 0;
+// Cards
+let isFlipped = false;
+function flipCard() {
+    const card = document.getElementById('myCard');
+    const txtEl = document.getElementById('cardText');
+    if (!isFlipped) {
+        const txt = cards[Math.floor(Math.random() * cards.length)];
+        txtEl.innerText = txt;
+        card.classList.add('is-flipped');
+        isFlipped = true;
+    } else {
+        card.classList.remove('is-flipped');
         setTimeout(() => {
-            el.innerText = txt;
-            el.style.opacity = 1;
-        }, 200);
+            txtEl.innerText = "Tap to reveal your intimate challenge...";
+        }, 400);
+        isFlipped = false;
     }
+}
 
-    // --- LOGIC: WHEEL ---
-    let wheelDeg = 0;
-    function spinWheel() {
-        wheelDeg += Math.floor(1000 + Math.random() * 2000);
-        document.getElementById('wheel').style.transform = `rotate(${wheelDeg}deg)`;
-        document.getElementById('wheel-text').innerText = "...";
-        
-        setTimeout(() => {
-            const res = wheelRes[Math.floor(Math.random() * wheelRes.length)];
-            document.getElementById('wheel-text').innerText = res;
-        }, 3000);
-    }
-
-    // --- LOGIC: CARDS ---
-    let isFlipped = false;
-    function flipCard() {
-        const card = document.getElementById('myCard');
-        const txt = document.getElementById('cardText');
-        
-        if(!isFlipped) {
-            txt.innerText = cards[Math.floor(Math.random() * cards.length)];
-            card.classList.add('is-flipped');
-            isFlipped = true;
-        } else {
-            card.classList.remove('is-flipped');
-            isFlipped = false;
-        }
-    }
-
-    // --- LOGIC: NAV ---
-    function setView(viewId, btn) {
-        document.querySelectorAll('main').forEach(el => el.classList.remove('active-view'));
-        document.getElementById(viewId).classList.add('active-view');
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
+// Nav
+function setView(viewId, btn) {
+    document.querySelectorAll('main').forEach(el => el.classList.remove('active-view'));
+    document.getElementById(viewId).classList.add('active-view');
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
 </script>
 </body>
 </html>
