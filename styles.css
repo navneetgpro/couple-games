@@ -36,10 +36,13 @@ body {
     margin: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #2d1b4e 100%);
-    background-attachment: fixed;
+    /* Fixed backgrounds can behave oddly on some mobile browsers */
+    background-attachment: scroll;
     color: var(--text);
-    height: 100vh;
-    overflow: hidden;
+    /* Mobile‑first: allow scrolling, avoid 100vh bugs on mobile address bar */
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -85,7 +88,7 @@ nav {
 }
 
 header {
-    padding: 20px 15px;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 15px 20px;
     text-align: center;
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(10px);
@@ -156,9 +159,10 @@ main {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 20px;
-    padding-bottom: 100px;
+    /* Leave room for bottom nav + safe area on modern phones */
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
     overflow-y: auto;
 }
 
@@ -176,7 +180,7 @@ main.active-view {
     border-radius: 25px;
     padding: 30px 20px;
     width: 100%;
-    max-width: 380px;
+    max-width: 420px;
     text-align: center;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.4),
@@ -602,7 +606,7 @@ nav {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-around;
-    padding: 12px 0 16px;
+    padding: 10px 0 calc(16px + env(safe-area-inset-bottom, 0px));
     z-index: 100;
     box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.5);
 }
@@ -777,10 +781,9 @@ nav button:hover span {
 
     /* Ensure content clears the nav */
     main {
-        padding-bottom: 125px !important;
-        /* Force clearance for 115px nav */
-        justify-content: flex-start;
+        padding-bottom: calc(125px + env(safe-area-inset-bottom, 0px)) !important;
         /* Align to top to avoid centering behind nav */
+        justify-content: flex-start;
         padding-top: 10px;
     }
 }
@@ -814,16 +817,11 @@ nav button:hover span {
 
 /* Specific fix for short screens (iPhone SE/6/7/8 style) */
 @media (max-height: 670px) {
-    body {
-        /* Force no scrolling if possible to keep app-like feel */
-        overflow-y: auto;
-    }
-
     main {
         padding-top: 5px;
         justify-content: flex-start;
-        padding-bottom: 120px;
-        /* Ensure clearance for nav */
+        /* Ensure clearance for nav + safe area */
+        padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
     }
 
     h1 {
@@ -844,8 +842,8 @@ nav button:hover span {
 /* Extra small devices or landscape */
 @media (max-height: 700px) {
     main {
-        padding-bottom: 80px;
-        /* Less bottom padding */
+        /* Less bottom padding on very short screens, still account for safe area */
+        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
         padding-top: 10px;
     }
 
@@ -874,5 +872,66 @@ nav button:hover span {
     .card-scene {
         height: 240px;
         width: 180px;
+    }
+}
+
+/* Medium devices (tablets / large phones in landscape) */
+@media (min-width: 600px) {
+    .glass-panel {
+        max-width: 520px;
+        padding: 32px 28px;
+    }
+
+    .dice-row {
+        gap: 24px;
+    }
+
+    .scene {
+        width: 110px;
+        height: 110px;
+    }
+
+    .cube__face {
+        width: 110px;
+        height: 110px;
+        font-size: 1.15rem;
+    }
+
+    .wheel-wrap {
+        width: 320px;
+        height: 320px;
+    }
+
+    .card-scene {
+        width: 300px;
+        height: 400px;
+    }
+}
+
+/* Larger tablets and desktop */
+@media (min-width: 900px) {
+    body {
+        align-items: center;
+    }
+
+    main {
+        width: 100%;
+        max-width: 920px;
+        margin: 0 auto;
+    }
+
+    .glass-panel {
+        max-width: 640px;
+    }
+
+    /* Mood buttons side‑by‑side for more "dashboard" feel */
+    #view-mood .level-btns {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    #view-mood .level-btn {
+        flex: 1 1 30%;
+        font-size: 1.1rem;
     }
 }
