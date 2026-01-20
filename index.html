@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Midnight Romance</title>
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --bg-dark: #120422;
+            --primary: #ff00cc;
+            --secondary: #333399;
+            --gold: #ffd700;
+            --text: #ffffff;
+            --panel-bg: rgba(30, 20, 60, 0.85);
+            /* Adding a wood texture URL. In a real app, download this and link locally. */
+            --wood-texture: url('https://images.pexels.com/photos/129731/pexels-photo-129731.jpeg?cs=srgb&dl=pexels-fwstudio-33348-129731.jpg&fm=jpg');
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #000000, #240b36);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 15px;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 { margin: 0; font-size: 1.5rem; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- MAIN LAYOUT --- */
+        main {
+            flex: 1;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-bottom: 80px; /* Space for nav */
+            overflow-y: auto;
+        }
+        main.active-view { display: flex; animation: fadeUp 0.4s ease-out; }
+
+        /* --- COMPONENTS --- */
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255,0,204,0.3);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        button.btn-main {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,0,204,0.4);
+            transition: transform 0.1s;
+        }
+        button.btn-main:active { transform: scale(0.95); opacity: 0.9; }
+
+        /* --- NEW REALISTIC WOODEN DICE STYLES --- */
+        .dice-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .dice-col { display: flex; flex-direction: column; align-items: center; }
+        
+        .scene { width: 85px; height: 85px; perspective: 800px; }
+        .cube {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg) rotateY(-45deg);
+            transition: transform 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+        .cube__face {
+            position: absolute; width: 85px; height: 85px;
+            /* Realistic Wood Texture & Color */
+            background-image: var(--wood-texture);
+            background-size: cover;
+            background-color: #d4b483; /* Fallback color */
+            border: none; /* No digital borders */
+            border-radius: 6px; /* Slightly rounded edges for realism */
+            /* Lighting: Inset shadow for depth + outer shadow */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.3);
+            
+            display: flex; justify-content: center; align-items: center;
+            
+            /* Hand-drawn looking text style */
+            font-family: 'Comic Sans MS', 'Marker Felt', sans-serif;
+            font-size: 1rem; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            color: #222; /* Softer black like ink */
+            
+            text-align: center;
+            backface-visibility: hidden;
+            padding: 5px;
+        }
+        /* Face Transforms (adjusted translation for new borders) */
+        .face-0 { transform: rotateY(0deg) translateZ(42.5px); }
+        .face-1 { transform: rotateY(180deg) translateZ(42.5px); }
+        .face-2 { transform: rotateY(90deg) translateZ(42.5px); }
+        .face-3 { transform: rotateY(-90deg) translateZ(42.5px); }
+        .face-4 { transform: rotateX(90deg) translateZ(42.5px); }
+        .face-5 { transform: rotateX(-90deg) translateZ(42.5px); }
+        
+        .dice-label { font-size: 0.7rem; color: #aaa; margin-top: 8px; }
+
+        /* --- T&D --- */
+        .td-box { min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 20px; color: #fff; }
+        .choice-btns { display: flex; gap: 10px; width: 100%; }
+        .btn-choice { flex: 1; padding: 15px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 1rem; }
+        
+        /* --- WHEEL --- */
+        .wheel-wrap { width: 250px; height: 250px; position: relative; margin: 0 auto; }
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%; border: 4px solid white;
+            background: conic-gradient(red, orange, yellow, lime, cyan, blue, magenta, purple);
+            transition: transform 3s ease-out;
+        }
+        .marker {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid white; z-index: 10;
+        }
+
+        /* --- CARDS --- */
+        .card-scene { width: 220px; height: 320px; perspective: 1000px; margin: 0 auto; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; }
+        .card.is-flipped { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 15px; padding: 20px; text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .card-front { background: #222; border: 2px solid var(--gold); color: var(--gold); font-size: 2rem; }
+        .card-back { background: #fff; transform: rotateY(180deg); color: #000; font-weight: bold; font-size: 1.2rem; }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; bottom: 0; width: 100%;
+            background: #1a1a1a; border-top: 1px solid #333;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            z-index: 100;
+        }
+        nav button {
+            background: none; border: none; color: #888;
+            display: flex; flex-direction: column; align-items: center;
+            font-size: 0.7rem; gap: 5px;
+        }
+        nav button.active { color: var(--primary); }
+        nav button span { font-size: 1.5rem; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Midnight Romance</h1>
+</header>
+
+<main id="view-dice" class="active-view">
+    <div class="glass-panel">
+        <h2 style="margin:0 0 15px 0; color:var(--primary)">Action Dice</h2>
+        <div class="dice-row">
+            <div class="dice-col">
+                <div class="scene"><div class="cube" id="cube-0"></div></div>
+                <div class="dice-label">Action</div>
+            </div>
+            <div class="dice-col">
+                <div class="scene"><div class="cube" id="cube-1"></div></div>
+                <div class="dice-label">Body Part</div>
+            </div>
+            <div class="dice-col">
+                <div class="scene"><div class="cube" id="cube-2"></div></div>
+                <div class="dice-label">How</div>
+            </div>
+        </div>
+        <button class="btn-main" onclick="rollDice()">ROLL</button>
+    </div>
+</main>
+
+<main id="view-td">
+    <div class="glass-panel">
+        <h2 style="margin:0 0 15px 0; color:var(--primary)">Truth or Dare</h2>
+        <div id="td-result" class="td-box">Make your choice...</div>
+        <div class="choice-btns">
+            <button class="btn-choice" style="background:#00d2ff" onclick="doTD('truth')">TRUTH</button>
+            <button class="btn-choice" style="background:#ff4b1f" onclick="doTD('dare')">DARE</button>
+        </div>
+    </div>
+</main>
+
+<main id="view-wheel">
+    <div class="wheel-wrap">
+        <div class="marker"></div>
+        <div class="wheel" id="wheel"></div>
+    </div>
+    <div id="wheel-text" style="margin-top:20px; font-weight:bold; color:var(--gold);">Ready to Spin</div>
+    <button class="btn-main" onclick="spinWheel()">SPIN</button>
+</main>
+
+<main id="view-cards">
+    <div class="card-scene" onclick="flipCard()">
+        <div class="card" id="myCard">
+            <div class="card-face card-front">❤️</div>
+            <div class="card-face card-back" id="cardText">Content</div>
+        </div>
+    </div>
+    <p style="margin-top:20px; color:#aaa;">Tap to reveal</p>
+</main>
+
+<nav>
+    <button class="active" onclick="setView('view-dice', this)"><span>🎲</span>Dice</button>
+    <button onclick="setView('view-td', this)"><span>🔥</span>T&D</button>
+    <button onclick="setView('view-wheel', this)"><span>🎡</span>Wheel</button>
+    <button onclick="setView('view-cards', this)"><span>❤️</span>Cards</button>
+</nav>
+
+<script>
+    // --- GLOBAL ERROR HANDLER ---
+    window.onerror = function(msg, url, line) {
+        // alert("Error: " + msg + "\nLine: " + line); // Disabled for production
+    };
+
+    // --- DATA ---
+    const d1 = ["Kiss", "Lick", "Bite", "Touch", "Massage", "Tease"];
+    const d2 = ["Neck", "Lips", "Ear", "Thigh", "Chest", "Back"];
+    const d3 = ["Softly", "Hard", "Slowly", "Wetly", "Deeply", "Now"];
+    
+    // --- UPDATED DATA ---
+
+    const truths = [
+        "What is a fantasy you've been too shy to tell me?",
+        "If you could dress me in any outfit, what would it be?",
+        "What is the exact moment you fell for me?",
+        "What is your favorite noise I make?",
+        "Have you ever had a naughty dream about me? Describe it.",
+        "What is one thing you want to try in the bedroom?",
+        "Do you prefer lights on, off, or dim?",
+        "What is the most sensitive part of your body right now?",
+        "What is a movie scene you've always wanted to recreate?",
+        "What’s the most adventurous place you’d like to get intimate?",
+        "If I gave you a 'free pass' to do anything to me for 1 hour, what would you do?",
+        "What is your biggest turn-on that isn't physical?",
+        "Describe your perfect date night.",
+        "What’s the most embarrassing thing you’ve done for a crush?"
+    ];
+
+    const dares = [
+        "Let me blindfold you and feed you a mystery item.",
+        "Do your best sexy dance for 30 seconds.",
+        "Whisper exactly what you want to do to me in my ear.",
+        "Let me write a word on your back with my tongue (you have to guess it).",
+        "Pose for a photo (for my eyes only).",
+        "Give me a massage anywhere I choose for 2 minutes.",
+        "Let me scroll through your photo gallery for 1 minute.",
+        "Use an ice cube on my neck.",
+        "Bite your lip and look at me with 'hungry' eyes.",
+        "Let me tickle you for 20 seconds without you laughing.",
+        "Remove one piece of clothing using only your teeth (if possible).",
+        "Walk across the room in the most seductive way possible.",
+        "Serenade me with a romantic song (bad singing encouraged)."
+    ];
+
+    // These will appear randomly when spinning the wheel
+    const wheelRes = [
+        "French Kiss", 
+        "Sensual Massage", 
+        "Remove Item", 
+        "Ear Nibble", 
+        "Slow Dance", 
+        "Neck Kiss", 
+        "Body Shot", 
+        "Spank", 
+        "Deep Gaze", 
+        "Whisper Secret",
+        "Foot Rub",
+        "Blindfold"
+    ];
+
+    const cards = [
+        "Maintain eye contact for 60 seconds without speaking.",
+        "Trace my spine with your fingernails.",
+        "Kiss every finger on my left hand.",
+        "Sit on my lap and just hug me for a minute.",
+        "Tell me 3 things you love about my body.",
+        "Slow dance with me (no music required).",
+        "Recreate our first kiss.",
+        "Give me a 'butterfly kiss' (using your eyelashes) on my cheek.",
+        "Hold my hand and describe our future.",
+        "Kiss my inner wrist.",
+        "Lay your head on my chest and listen to my heartbeat.",
+        "Give me a compliment that has nothing to do with my looks.",
+        "Your choice: Truth or Dare?"
+    ];
+
+    // --- INIT ---
+    window.onload = function() {
+        initDiceFaces('cube-0', d1);
+        initDiceFaces('cube-1', d2);
+        initDiceFaces('cube-2', d3);
+    };
+
+    function initDiceFaces(id, values) {
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.innerHTML = "";
+        // Create 6 faces
+        for(let i=0; i<6; i++) {
+            let div = document.createElement('div');
+            div.className = `cube__face face-${i}`;
+            div.innerText = values[i];
+            el.appendChild(div);
+        }
+    }
+
+    // --- LOGIC: DICE ---
+    function rollDice() {
+        ['cube-0', 'cube-1', 'cube-2'].forEach((id, idx) => {
+            const el = document.getElementById(id);
+            const r = Math.floor(Math.random() * 6);
+            
+            let rx = 0, ry = 0;
+            if(r===1) ry=180;
+            else if(r===2) ry=-90;
+            else if(r===3) ry=90;
+            else if(r===4) rx=-90;
+            else if(r===5) rx=90;
+
+            const spins = 720 + (Math.floor(Math.random()*3)*360);
+            el.style.transform = `rotateX(${rx + spins}deg) rotateY(${ry + spins}deg)`;
+        });
+    }
+
+    // --- LOGIC: T&D ---
+    function doTD(type) {
+        const arr = type === 'truth' ? truths : dares;
+        const txt = arr[Math.floor(Math.random() * arr.length)];
+        const el = document.getElementById('td-result');
+        el.style.opacity = 0;
+        setTimeout(() => {
+            el.innerText = txt;
+            el.style.opacity = 1;
+        }, 200);
+    }
+
+    // --- LOGIC: WHEEL ---
+    let wheelDeg = 0;
+    function spinWheel() {
+        wheelDeg += Math.floor(1000 + Math.random() * 2000);
+        document.getElementById('wheel').style.transform = `rotate(${wheelDeg}deg)`;
+        document.getElementById('wheel-text').innerText = "...";
+        
+        setTimeout(() => {
+            const res = wheelRes[Math.floor(Math.random() * wheelRes.length)];
+            document.getElementById('wheel-text').innerText = res;
+        }, 3000);
+    }
+
+    // --- LOGIC: CARDS ---
+    let isFlipped = false;
+    function flipCard() {
+        const card = document.getElementById('myCard');
+        const txt = document.getElementById('cardText');
+        
+        if(!isFlipped) {
+            txt.innerText = cards[Math.floor(Math.random() * cards.length)];
+            card.classList.add('is-flipped');
+            isFlipped = true;
+        } else {
+            card.classList.remove('is-flipped');
+            isFlipped = false;
+        }
+    }
+
+    // --- LOGIC: NAV ---
+    function setView(viewId, btn) {
+        document.querySelectorAll('main').forEach(el => el.classList.remove('active-view'));
+        document.getElementById(viewId).classList.add('active-view');
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+</script>
+</body>
+</html>
