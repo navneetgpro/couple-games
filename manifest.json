@@ -2,7 +2,7 @@
   "name": "Midnight Romance",
   "short_name": "Romance",
   "description": "A romantic game app for couples with dice, truth or dare, wheel, and intimate cards",
-  "start_url": "/",
+  "start_url": "/couple-games",
   "display": "standalone",
   "background_color": "#0a0015",
   "theme_color": "#ff1493",
@@ -21,6 +21,9 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["entertainment", "lifestyle"],
+  "categories": [
+    "entertainment",
+    "lifestyle"
+  ],
   "screenshots": []
 }
